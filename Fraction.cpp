@@ -122,32 +122,90 @@ void Fraction::reduce() {
     // TODO this is a fun one...
 }
 
-Fraction operator+ (const Fraction& lhs, const Fraction& rhs);  // f + f
-Fraction operator+ (const Fraction& lhs, const int& rhs);  // f + i
-Fraction operator+ (const int& lhs, const Fraction& rhs);  // i + f
+Fraction operator+ (const Fraction& lhs, const Fraction& rhs) {
+    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    temp += rhs;
+    return temp;
+}
 
-Fraction operator- (const Fraction& lhs, const Fraction& rhs);  // f - f
-Fraction operator- (const Fraction& lhs, const int& rhs);  // f - i
-Fraction operator- (const int& lhs, const Fraction& rhs);  // i - f
+Fraction operator+ (const Fraction& lhs, const int& rhs) {
+    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    temp += rhs;
+    return temp;
+}
 
-Fraction operator* (const Fraction& lhs, const Fraction& rhs);  // f * f
-Fraction operator* (const Fraction& lhs, const int& rhs);  // f * i
-Fraction operator* (const int& lhs, const Fraction& rhs);  // i * f
+Fraction operator+ (const int& lhs, const Fraction& rhs) {
+    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    temp += rhs;
+    return temp;
+}
 
-Fraction operator/ (const Fraction& lhs, const Fraction& rhs);  // f / f
-Fraction operator/ (const Fraction& lhs, const int& rhs);  // f / i
-Fraction operator/ (const int& lhs, const Fraction& rhs);  // i / f
+Fraction operator- (const Fraction& lhs, const Fraction& rhs) {
+    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    temp -= rhs;
+    return temp;
+}
+
+Fraction operator- (const Fraction& lhs, const int& rhs) {
+    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    temp -= rhs;
+    return temp;
+}
+
+Fraction operator- (const int& lhs, const Fraction& rhs) {
+    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    temp -= rhs;
+    return temp;
+}
+
+Fraction operator* (const Fraction& lhs, const Fraction& rhs) {
+    Fraction temp{lhs};
+    temp *= rhs;
+    return temp;
+}
+
+Fraction operator* (const Fraction& lhs, const int& rhs) {
+    Fraction temp{lhs};
+    temp *= rhs;
+    return temp;
+}
+
+Fraction operator* (const int& lhs, const Fraction& rhs) {
+    Fraction temp{lhs};
+    temp *= rhs;
+    return temp;
+}
+
+
+Fraction operator/ (const Fraction& lhs, const Fraction& rhs) {
+    Fraction temp{lhs};
+    temp /= rhs;
+    return temp;
+}
+
+Fraction operator/ (const Fraction& lhs, const int& rhs) {
+    Fraction temp{lhs};
+    temp /= rhs;
+    return temp;
+}
+
+Fraction operator/ (const int& lhs, const Fraction& rhs) {
+    Fraction temp{lhs};
+    temp /= rhs;
+    return temp;
+}
+
 
 bool operator== (const Fraction& lhs, const Fraction& rhs) {
-    return ((lhs.numerator == rhs numerator) 
-            && (lhs.denominator == rhs.denominator));
+    return ((lhs.getNumerator() == rhs.getNumerator()) 
+            && (lhs.getDenominator() == rhs.getDenominator()));
 }
 bool operator== (const Fraction& lhs, const int& rhs) {
-    return ((lhs.denominator == 1) && (lhs.numerator == rhs.numerator));
+    return ((lhs.getDenominator() == 1) && (lhs.getNumerator() == rhs));
 }
 
 bool operator== (const int& lhs, const Fraction& rhs) {
-    return rhs == lhs;
+    return ((rhs.getDenominator() == 1) && (lhs == rhs.getNumerator()));
 }
 
 bool operator!= (const Fraction& lhs, const Fraction& rhs) {
@@ -181,7 +239,18 @@ bool operator== (const Fraction& lhs, const Fraction& rhs);  // f == f
 bool operator== (const Fraction& lhs, const int& rhs);  // f == i
 bool operator== (const int& lhs, const Fraction& rhs);  // i == f
 
-istream& operator>> (istream istr, Fraction& rhs);
-ostream& operator>> (ostream ostr, Fraction& rhs);
+istream& operator>> (istream& istr, Fraction& rhs) {
+    string stringN;
+    getline(istr, stringN, '/');
+    rhs.setNumerator(stol(stringN));
+    long temp;
+    istr >> temp;
+    rhs.setDenominator(temp);
+    return istr;
+}
 
+ostream& operator<< (ostream& ostr, Fraction& rhs) {
+    ostr << rhs();
+    return ostr;    
+}
 

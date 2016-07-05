@@ -17,6 +17,12 @@ class Fraction {
         , denominator(d)
     {}
 
+    const long& getNumerator() const { return numerator; }
+    const long& getDenominator() const { return denominator; }
+
+    void setNumerator(const long& n) { numerator = n; }
+    void setDenominator(const long& d) { denominator = d; }
+
     Fraction& operator=  (const int& val);  // f =  i
     Fraction& operator+= (const int& val);  // f += i 
     Fraction& operator-= (const int& val);  // f -= i 
