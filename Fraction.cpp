@@ -184,3 +184,4 @@ bool operator== (const int& lhs, const Fraction& rhs);  // i == f
 istream& operator>> (istream istr, Fraction& rhs);
 ostream& operator>> (ostream ostr, Fraction& rhs);
 
+
