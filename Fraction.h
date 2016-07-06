@@ -14,8 +14,7 @@ class Fraction {
   public:
     Fraction(const long& n = 0, const long& d = 1) 
         : numerator(n)
-        , denominator(d)
-    {}
+        , denominator(d) {normalize(); reduce();}
 
     const long& getNumerator() const { return numerator; }
     const long& getDenominator() const { return denominator; }
@@ -100,7 +99,7 @@ bool operator== (const Fraction& lhs, const Fraction& rhs);  // f == f
 bool operator== (const Fraction& lhs, const int& rhs);  // f == i
 bool operator== (const int& lhs, const Fraction& rhs);  // i == f
 
-istream& operator>> (istream istr, Fraction& rhs);
-ostream& operator>> (ostream ostr, Fraction& rhs);
+istream& operator>> (istream& istr, Fraction& rhs);
+ostream& operator<< (ostream& ostr, const Fraction& rhs);
 
 #endif

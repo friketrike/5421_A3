@@ -115,11 +115,40 @@ Fraction Fraction::operator-- (int) {
 }
 
 void Fraction::normalize() {
-    *this *= (denominator < 0) ? -1 : 1;
+    if (denominator < 0) {
+        numerator *= -1;
+        denominator *= -1;
+    }
 }
 
 void Fraction::reduce() {
     // TODO this is a fun one...
+    if (numerator == 0 || denominator == 1) {
+        return;
+    }
+    long n = (numerator > 0) ? numerator : -numerator;
+    long d{denominator};
+    long exp2{0};
+    long gcd;
+    while (!(n & 1) && !(d & 1)) {
+        n /= 2;
+        d /= 2;
+        ++exp2;
+    }
+    while (n != d) {
+        if (!(n & 1)) {
+            n /= 2;
+        } else if (!(d & 1)) {
+            d /= 2;
+        } else if (n > d) {
+            n = (n-d)/2;
+        } else { // d > n
+            d = (d-n)/2;
+        }
+    }
+    gcd = n * (1 << exp2);
+    numerator /= gcd;
+    denominator /= gcd;
 }
 
 Fraction operator+ (const Fraction& lhs, const Fraction& rhs) {
@@ -197,15 +226,15 @@ Fraction operator/ (const int& lhs, const Fraction& rhs) {
 
 
 bool operator== (const Fraction& lhs, const Fraction& rhs) {
-    return ((lhs.getNumerator() == rhs.getNumerator()) 
-            && (lhs.getDenominator() == rhs.getDenominator()));
+    return ((lhs.getNumerator() * rhs.getDenominator()) 
+            == (rhs.getNumerator() * lhs.getDenominator()));
 }
 bool operator== (const Fraction& lhs, const int& rhs) {
-    return ((lhs.getDenominator() == 1) && (lhs.getNumerator() == rhs));
+    return ((lhs.getDenominator() * rhs) == lhs.getNumerator());
 }
 
 bool operator== (const int& lhs, const Fraction& rhs) {
-    return ((rhs.getDenominator() == 1) && (lhs == rhs.getNumerator()));
+    return ((rhs.getDenominator() * lhs) == rhs.getNumerator());
 }
 
 bool operator!= (const Fraction& lhs, const Fraction& rhs) {
@@ -219,37 +248,67 @@ bool operator!= (const int& lhs, const Fraction& rhs) {
     return !(lhs == rhs);
 }
 
-bool operator< (const Fraction& lhs, const Fraction& rhs);  // f < f
-bool operator< (const Fraction& lhs, const int& rhs);  // f < i
-bool operator< (const int& lhs, const Fraction& rhs);  // i < f
+bool operator< (const Fraction& lhs, const Fraction& rhs) {
+    return ((lhs.getNumerator() * rhs.getDenominator()) 
+            < (lhs.getDenominator() * rhs.getNumerator()));
+}
 
-bool operator<= (const Fraction& lhs, const Fraction& rhs);  // f <= f
-bool operator<= (const Fraction& lhs, const int& rhs);  // f <= i
-bool operator<= (const int& lhs, const Fraction& rhs);  // i <= f
+bool operator< (const Fraction& lhs, const int& rhs) {
+    return (lhs.getNumerator() < (lhs.getDenominator() * rhs));
+}
 
-bool operator> (const Fraction& lhs, const Fraction& rhs);  // f > f
-bool operator> (const Fraction& lhs, const int& rhs);  // f > i
-bool operator> (const int& lhs, const Fraction& rhs);  // i > f
+bool operator< (const int& lhs, const Fraction& rhs) {
+    return ((lhs * rhs.getDenominator()) < rhs.getNumerator());
+}
 
-bool operator>= (const Fraction& lhs, const Fraction& rhs);  // f >= f
-bool operator>= (const Fraction& lhs, const int& rhs);  // f >= i
-bool operator>= (const int& lhs, const Fraction& rhs);  // i >= f
+bool operator<= (const Fraction& lhs, const Fraction& rhs) {
+    return !(lhs > rhs);
+}
 
-bool operator== (const Fraction& lhs, const Fraction& rhs);  // f == f
-bool operator== (const Fraction& lhs, const int& rhs);  // f == i
-bool operator== (const int& lhs, const Fraction& rhs);  // i == f
+bool operator<= (const Fraction& lhs, const int& rhs) {
+    return !(lhs > rhs);
+}
+
+bool operator<= (const int& lhs, const Fraction& rhs) {
+    return !(lhs > rhs);
+}
+
+
+bool operator> (const Fraction& lhs, const Fraction& rhs) {
+    return rhs < lhs;
+}
+
+bool operator> (const Fraction& lhs, const int& rhs) {
+    return rhs < lhs;
+}
+
+bool operator> (const int& lhs, const Fraction& rhs) {
+    return rhs < lhs;
+}
+
+bool operator>= (const Fraction& lhs, const Fraction& rhs) {
+    return !(lhs < rhs);
+}
+
+bool operator>= (const Fraction& lhs, const int& rhs) {
+    return !(lhs < rhs);
+}
+
+bool operator>= (const int& lhs, const Fraction& rhs) {
+    return !(lhs < rhs);
+}
 
 istream& operator>> (istream& istr, Fraction& rhs) {
     string stringN;
     getline(istr, stringN, '/');
-    rhs.setNumerator(stol(stringN));
+    rhs.setNumerator(std::stol(stringN));
     long temp;
     istr >> temp;
     rhs.setDenominator(temp);
     return istr;
 }
 
-ostream& operator<< (ostream& ostr, Fraction& rhs) {
+ostream& operator<< (ostream& ostr, const Fraction& rhs) {
     ostr << rhs();
     return ostr;    
 }
