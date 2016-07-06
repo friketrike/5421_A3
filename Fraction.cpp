@@ -3,48 +3,58 @@
 Fraction& Fraction::operator=  (const int& val) {
     numerator = val;
     denominator = 1;
+    return *this;
 }
 
 Fraction& Fraction::operator+= (const int& val) {
     numerator += (denominator * val);
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator-= (const int& val) { 
     numerator -= (denominator * val);
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator*= (const int& val) {
     numerator *= val;
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator/= (const int& val) {
     denominator *= val;
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator=  (const Fraction& rhs) {
     numerator = rhs.numerator;
     denominator = rhs.denominator;
+    return *this;
 }
 
 Fraction& Fraction::operator+= (const Fraction& rhs) {
     numerator = (numerator * rhs.denominator) 
         + (rhs.numerator * denominator);
+    denominator = denominator * rhs.denominator;
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator-= (const Fraction& rhs) {
     numerator = (numerator * rhs.denominator) 
         - (rhs.numerator * denominator);
+    denominator = denominator * rhs.denominator;
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator*= (const Fraction& rhs) {
@@ -52,6 +62,7 @@ Fraction& Fraction::operator*= (const Fraction& rhs) {
     denominator *= rhs.denominator;
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator/= (const Fraction& rhs) {
@@ -59,18 +70,21 @@ Fraction& Fraction::operator/= (const Fraction& rhs) {
     denominator *= rhs.numerator;
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator++ () {
     numerator += denominator;
     normalize();
     reduce();
+    return *this;
 }
 
 Fraction& Fraction::operator-- () {
     numerator -= denominator;
     normalize();
     reduce();
+    return *this;
 }
 
 string Fraction::operator() () const {
@@ -91,15 +105,14 @@ const long& Fraction::operator[] (const string s) const {
     return (s == "top") ? numerator : denominator;
 }
 
-Fraction Fraction::operator+ (const Fraction& rhs) const {
+Fraction Fraction::operator+ () const {
     Fraction temp = *this;
-    temp += rhs;
     return temp;
 }
 
-Fraction Fraction::operator- (const Fraction& rhs) const {
+Fraction Fraction::operator- () const {
     Fraction temp = *this;
-    temp -= rhs;
+    temp *= -1;
     return temp;
 }
 

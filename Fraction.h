@@ -22,6 +22,9 @@ class Fraction {
     void setNumerator(const long& n) { numerator = n; }
     void setDenominator(const long& d) { denominator = d; }
 
+    void normalize();
+    void reduce();
+
     Fraction& operator=  (const int& val);  // f =  i
     Fraction& operator+= (const int& val);  // f += i 
     Fraction& operator-= (const int& val);  // f -= i 
@@ -44,15 +47,11 @@ class Fraction {
     long& operator[] (const string& s);
     const long& operator[] (const string s) const;
 
-    Fraction operator+ (const Fraction& rhs) const; // +f
-    Fraction operator- (const Fraction& rhs) const; // -f
+    Fraction operator+ () const; // +f
+    Fraction operator- () const; // -f
 
     Fraction operator++ (int);  // f++
-    Fraction operator-- (int);  // f--;
-
-  private:
-    void normalize();
-    void reduce();
+    Fraction operator-- (int);  // f--
 };
 
 Fraction operator+ (const Fraction& lhs, const Fraction& rhs);  // f + f
