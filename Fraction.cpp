@@ -89,7 +89,8 @@ Fraction& Fraction::operator-- () {
 
 string Fraction::operator() () const {
     string s;
-    s = s + "(" + to_string(numerator) + "/" + to_string(denominator) + ")";
+    s += "(" + to_string(numerator) + "/" 
+        + to_string(denominator) + ")";
     return s;
 }
 
@@ -106,23 +107,23 @@ const long& Fraction::operator[] (const string s) const {
 }
 
 Fraction Fraction::operator+ () const {
-    Fraction temp = *this;
+    Fraction temp{*this};
     return temp;
 }
 
 Fraction Fraction::operator- () const {
-    Fraction temp = *this;
+    Fraction temp{*this};
     temp *= -1;
     return temp;
 }
 
 Fraction Fraction::operator++ (int) {
-    Fraction temp = *this;
+    Fraction temp{*this};
     ++(*this);
     return temp;
 }
 Fraction Fraction::operator-- (int) {
-    Fraction temp = *this;
+    Fraction temp{*this};
     --(*this);
     return temp;
 }
@@ -135,7 +136,6 @@ void Fraction::normalize() {
 }
 
 void Fraction::reduce() {
-    // TODO this is a fun one...
     if (numerator == 0 || denominator == 1) {
         return;
     }
@@ -143,6 +143,7 @@ void Fraction::reduce() {
     long d{denominator};
     long exp2{0};
     long gcd;
+    // bitwise test for even-ness - find power of two in the gcd decomposition
     while (!(n & 1) && !(d & 1)) {
         n /= 2;
         d /= 2;
@@ -153,6 +154,7 @@ void Fraction::reduce() {
             n /= 2;
         } else if (!(d & 1)) {
             d /= 2;
+        // the gcd of n and d must also be the gcd of their difference
         } else if (n > d) {
             n = (n-d)/2;
         } else { // d > n
@@ -165,37 +167,37 @@ void Fraction::reduce() {
 }
 
 Fraction operator+ (const Fraction& lhs, const Fraction& rhs) {
-    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    Fraction temp{lhs};
     temp += rhs;
     return temp;
 }
 
 Fraction operator+ (const Fraction& lhs, const int& rhs) {
-    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    Fraction temp{lhs};
     temp += rhs;
     return temp;
 }
 
 Fraction operator+ (const int& lhs, const Fraction& rhs) {
-    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    Fraction temp{lhs};
     temp += rhs;
     return temp;
 }
 
 Fraction operator- (const Fraction& lhs, const Fraction& rhs) {
-    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    Fraction temp{lhs};
     temp -= rhs;
     return temp;
 }
 
 Fraction operator- (const Fraction& lhs, const int& rhs) {
-    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    Fraction temp{lhs};
     temp -= rhs;
     return temp;
 }
 
 Fraction operator- (const int& lhs, const Fraction& rhs) {
-    Fraction temp{lhs}; // TODO assignment for initialization elsewhere
+    Fraction temp{lhs};
     temp -= rhs;
     return temp;
 }
@@ -312,17 +314,33 @@ bool operator>= (const int& lhs, const Fraction& rhs) {
 }
 
 istream& operator>> (istream& istr, Fraction& rhs) {
-    string stringN;
+    // this is nicer, takes num/den from cin, but we're following specs
+    /*string stringN;
     getline(istr, stringN, '/');
-    rhs.setNumerator(std::stol(stringN));
+    rhs.setNumerator(std::stol(stringN));*/
     long temp;
+    cout << "numerator? ";
+    istr >> temp;
+    rhs.setNumerator(temp);
+    cout << "denominator? ";
     istr >> temp;
     rhs.setDenominator(temp);
+    rhs.normalize();
+    rhs.reduce();
     return istr;
 }
 
 ostream& operator<< (ostream& ostr, const Fraction& rhs) {
-    ostr << rhs();
+    string s;
+    if (rhs.getNumerator() == 0) {
+        s = "0";
+    } else if (rhs.getDenominator() == 1) {
+        s = to_string(rhs.getNumerator());
+    } else {
+        s = to_string(rhs.getNumerator()) + "/" 
+            + to_string(rhs.getDenominator());
+    }
+    ostr << s;
     return ostr;    
 }
 
