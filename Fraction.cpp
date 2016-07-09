@@ -1,3 +1,11 @@
+/*
+ * Assignennt 3, COMP 5421, summer 2016  
+ * Federico O'Reilly Regueiro 40012304
+ * Concordia University
+ *
+ * Fraction Class Implementation File
+ */
+
 #include "Fraction.h"
 
 Fraction& Fraction::operator=  (const int& val) {
